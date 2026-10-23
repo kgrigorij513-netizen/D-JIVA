@@ -1,0 +1,15 @@
+import numpy as np
+
+def evolution_gradient(S, mu, sigma, R, dt=0.01):
+    """
+    Оператор Ω (Ю): эволюционный отбор через градиент когерентности.
+    """
+    grad_R = np.sign(S) * R
+    xi = np.random.normal(0, 1, size=S.shape)
+    dS = mu * grad_R * dt + sigma * xi * np.sqrt(dt)
+    return S + dS
+
+if __name__ == "__main__":
+    S = np.random.uniform(-1, 1, size=100)
+    S_next = evolution_gradient(S, mu=0.5, sigma=0.1, R=0.9)
+    print("Эволюция вектора состояния завершена.")
