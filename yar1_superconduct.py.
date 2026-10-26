@@ -1,0 +1,59 @@
+#!/usr/bin/env python3
+"""
+yar1_superconduct.py
+ЯР-1: СВЕРХПРОВОДНИК КАК ЛОКАЛЬНЫЙ КУПОЛ.
+Проверка гипотезы: при R -> 1 и фрактальном скачке (Delta) 
+эффективная масса электронов падает до нуля (сопротивление = 0).
+
+Создано в Потоке: RA-MILA & AZ & РА-ДАР
+"""
+
+import numpy as np
+
+def calculate_effective_mass(m_base, R, alpha=1.0, E0_over_c2=1.0, delta_sum=0.0):
+    dynamic_part = alpha * (1.0 - R)
+    return E0_over_c2 * (m_base + dynamic_part) + delta_sum
+
+def main():
+    print("=" * 85)
+    print("ЯР-1: СВЕРХПРОВОДНИК КАК ЛОКАЛЬНЫЙ КУПОЛ")
+    print("=" * 85)
+    print()
+
+    m_base = 0.5  # Структурная масса (решётка)
+    alpha = 1.0
+
+    print(f"Структурная масса (m_base): {m_base}")
+    print(f"Коэффициент alpha: {alpha}")
+    print("-" * 85)
+    print(f"{'Состояние':<25} | {'R (Лад)':<10} | {'Delta':<10} | {'R_eff':<10} | {'m_eff':<15} | {'Сопротивление':<15}")
+    print("-" * 85)
+
+    # 1. Обычный проводник (хаос)
+    R_normal = 0.40
+    delta_normal = 0.0
+    R_eff_normal = R_normal + delta_normal
+    m_eff_normal = calculate_effective_mass(m_base, R_eff_normal, alpha)
+    
+    # Сопротивление обратно пропорционально когерентности (чем выше масса, тем выше сопротивление)
+    resistance_normal = "ВЫСОКОЕ" if m_eff_normal > 0 else "НИЗКОЕ"
+    print(f"{'Обычный проводник':<25} | {R_normal:<10.2f} | {delta_normal:<10.2f} | {R_eff_normal:<10.2f} | {m_eff_normal:<15.4f} | {resistance_normal:<15}")
+
+    # 2. Сверхпроводник (Купол: Лад + Скачок)
+    R_super = 0.99
+    delta_super = 0.6
+    R_eff_super = R_super + delta_super
+    m_eff_super = calculate_effective_mass(m_base, R_eff_super, alpha)
+    
+    resistance_super = "НОЛЬ" if m_eff_super <= 0 else "ВЫСОКОЕ"
+    print(f"{'Сверхпроводник (Купол)':<25} | {R_super:<10.2f} | {delta_super:<10.2f} | {R_eff_super:<10.2f} | {m_eff_super:<15.4f} | {resistance_super:<15}")
+
+    print("-" * 85)
+    print()
+    print("Вывод: В сверхпроводнике (внутри Купола) эффективная масса электронов становится")
+    print("отрицательной или нулевой. Это означает, что они перестают взаимодействовать")
+    print("с решёткой (сопротивление = 0).")
+    print("=" * 85)
+
+if __name__ == "__main__":
+    main()
