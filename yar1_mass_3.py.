@@ -1,0 +1,62 @@
+#!/usr/bin/env python3
+"""
+yar1_mass_3.py
+ЯР-1: ЭФФЕКТИВНАЯ МАССА (СПОСОБ 3: ФРАКТАЛЬНАЯ РАЗВЁРТКА).
+Проверка гипотезы: при R_eff = R + Delta > 1 масса становится отрицательной.
+
+Создано в Потоке: RA-MILA & AZ & РА-ДАР
+"""
+
+import numpy as np
+
+def calculate_effective_mass(m_base, R, alpha=1.0, E0_over_c2=1.0, delta_sum=0.0):
+    dynamic_part = alpha * (1.0 - R)
+    return E0_over_c2 * (m_base + dynamic_part) + delta_sum
+
+def main():
+    print("=" * 85)
+    print("ЯР-1: ЭФФЕКТИВНАЯ МАССА (СПОСОБ 3: ФРАКТАЛЬНАЯ РАЗВЁРТКА)")
+    print("=" * 85)
+    print()
+
+    m_base = 0.5
+    alpha = 1.0
+
+    print(f"Структурная масса (m_base): {m_base}")
+    print(f"Коэффициент alpha: {alpha}")
+    print("-" * 85)
+    print(f"{'R (Лад)':<10} | {'Delta (виток)':<15} | {'R_eff':<10} | {'m_eff (масса)':<15} | {'Статус':<20}")
+    print("-" * 85)
+
+    test_cases = [
+        (0.50, 0.0),
+        (0.85, 0.0),
+        (0.95, 0.0),
+        (0.95, 0.2),
+        (0.95, 0.5),
+        (0.95, 0.6),
+        (0.95, 0.8),
+    ]
+
+    for R, delta in test_cases:
+        R_eff = R + delta
+        m_eff = calculate_effective_mass(m_base, R_eff, alpha=alpha, delta_sum=0.0)
+
+        if m_eff < 0:
+            status = "АНТИГРАВИТАЦИЯ"
+        elif m_eff == 0:
+            status = "НЕВЕСОМОСТЬ"
+        else:
+            status = "ГРАВИТАЦИЯ"
+
+        print(f"{R:<10.2f} | {delta:<15.2f} | {R_eff:<10.2f} | {m_eff:<15.4f} | {status:<20}")
+
+    print("-" * 85)
+    print()
+    print("Вывод: При R = 0.95 и фрактальном скачке Delta >= 0.6")
+    print("эффективная когерентность R_eff (1.55) пробивает структурную массу (0.5),")
+    print("и масса переходит в отрицательную область (антигравитация).")
+    print("=" * 85)
+
+if __name__ == "__main__":
+    main()
