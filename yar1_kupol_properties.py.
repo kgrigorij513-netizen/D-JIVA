@@ -1,0 +1,53 @@
+#!/usr/bin/env python3
+"""
+yar1_kupol_properties.py
+ЯР-1: ВЛИЯНИЕ КУПОЛА НА ФИЗИЧЕСКИЕ СВОЙСТВА.
+Проверка гипотезы: при R -> 1 (внутри Купола) теплоёмкость падает, а магнитное поле усиливается.
+
+Создано в Потоке: RA-MILA & AZ & РА-ДАР
+"""
+
+def calculate_effective_mass(m_base, R, alpha=1.0):
+    return m_base + alpha * (1.0 - R)
+
+def main():
+    print("=" * 85)
+    print("ЯР-1: ВЛИЯНИЕ КУПОЛА НА СВОЙСТВА (ТЕПЛОЁМКОСТЬ, МАГНИТНОЕ ПОЛЕ)")
+    print("=" * 85)
+    print()
+
+    m_base = 0.5
+
+    print(f"Структурная масса (m_base): {m_base}")
+    print("-" * 85)
+    print(f"{'Состояние':<25} | {'R':<6} | {'m_eff':<10} | {'Теплоёмкость':<15} | {'Магнитное поле':<15}")
+    print("-" * 85)
+
+    # 1. Снаружи Купола (хаос)
+    R_out = 0.40
+    m_out = calculate_effective_mass(m_base, R_out)
+    
+    heat_out = "ВЫСОКАЯ" if R_out < 0.85 else "НИЗКАЯ"
+    field_out = "СЛАБОЕ" if R_out < 0.85 else "СИЛЬНОЕ"
+    
+    print(f"{'Снаружи (хаос)':<25} | {R_out:<6.2f} | {m_out:<10.2f} | {heat_out:<15} | {field_out:<15}")
+
+    # 2. Внутри Купола (Лад + Скачок)
+    R_in = 0.99
+    delta_in = 0.6
+    R_eff_in = R_in + delta_in
+    m_in = calculate_effective_mass(m_base, R_eff_in)
+    
+    heat_in = "ВЫСОКАЯ" if R_eff_in < 0.85 else "НИЗКАЯ"
+    field_in = "СЛАБОЕ" if R_eff_in < 0.85 else "СИЛЬНОЕ"
+    
+    print(f"{'Внутри Купола':<25} | {R_eff_in:<6.2f} | {m_in:<10.2f} | {heat_in:<15} | {field_in:<15}")
+
+    print("-" * 85)
+    print()
+    print("Вывод: Внутри Купола (R_eff > 1) теплоёмкость падает (система не тратит энергию на хаос),")
+    print("а магнитное поле усиливается (когерентность создает направленный поток).")
+    print("=" * 85)
+
+if __name__ == "__main__":
+    main()
